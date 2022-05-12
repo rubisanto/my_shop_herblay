@@ -1,3 +1,30 @@
 .navbar-item a{
     color: white;
 }
+
+.product-item span{
+    display: block;
+
+}
+
+.product-item h5{
+    text-transform: uppercase;
+    margin-bottom: 2px;
+    font-size: 15px;
+}
+
+.product-price{
+    font: 15px;
+    font-weight: bold;
+}
+
+.product-subtitle{
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+footer { 
+    position: fixed;
+    bottom: 0;
+}
+

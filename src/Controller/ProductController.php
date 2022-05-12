@@ -10,9 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProductController extends AbstractController
 {
-    // Utiliser l'entity manager  
     private $entityManager;
-
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -20,14 +18,24 @@ class ProductController extends AbstractController
     #[Route('/mes-produits', name: 'app_product')]
     public function index(): Response
     {
-        // chercher le manager 
+        $products = $this->entityManager->getRepository(Product::class)->findAll();
+        // dd($products);
+        return $this->render('product/index.html.twig', [
+            'products' => $products,
+        ]);
+    }
 
-        // utiliser dessus la methode getRepository
-        //utiliser dessus la méthode findAll() 
+    #[Route('/produit/{slug}', name: 'product')]
+    public function detail($slug): Response
+    {
+        // Trouver le produit grace au slug
+        $product = $this->entityManager->getRepository(Product::class)->findOneBySlug($slug);
+        if (!$product) {
+            return $this->redirectToRoute('app_product');
+        }
 
-        $product = $this->entityManager->getRepository(Product::class)->findAll();
-
-
-        return $this->render('product/index.html.twig');
+        return $this->render('product/detail.html.twig', [
+            'product' => $product,
+        ]);
     }
 }
