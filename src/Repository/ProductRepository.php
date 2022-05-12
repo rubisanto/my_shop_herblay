@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Classe\Search;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Exception\ORMException;
@@ -47,6 +48,27 @@ class ProductRepository extends ServiceEntityRepository
         }
     }
 
+    public function findWithSearch(Search $search)
+    {
+        // DQL = SQL simplifé 
+        $query = $this->createQueryBuilder('p')
+            ->select('p', 'c')
+            ->join('p.category', 'c');
+        if (!(empty($search->categories))) {
+            $query = $query
+                ->where('c.id IN (:categories)')
+                ->setParameter('categories', $search->categories);;
+        }
+
+        if (!(empty($search->string))) {
+            $query = $query
+                ->andWhere('p.name LIKE :string')
+                ->setParameter('string', "%{$search->string}%");
+        }
+        return $query->getQuery()->getResult();;
+    }
+}
+
     //    /**
     //     * @return Product[] Returns an array of Product objects
     //     */
@@ -71,4 +93,3 @@ class ProductRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
-}

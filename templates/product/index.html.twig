@@ -8,36 +8,38 @@
 	<div class="row">
 		<div class="col-md-3">
 			<h2>Filtrer</h2>
-		</div>
-		<div class="col-md-9">
-
-			<h2>Les produits</h2>
-			<div class="row">
-				{% for product in products %}
-					<div class="col-md-4">
-
-						<div
-							class="product-item text-center">
-							{# Utiliser OBLIGATOIREMENT path pour la route et un objet Json en deuxième paramètre #}
-							<a href="{{path('product', { 'slug': product.slug})}}"><img src="/uploads/{{product.picture}}" alt="{{product.name}}" class="img-fluid">
-							</a>
-							<h5>{{product.name}}</h5>
-							<span class="product-subtitle">{{product.subtitle}}</span>
-							{# Préciser le format de l'affichage du prix  #}
-							<span class="product-price">{{(product.price / 100)|number_format(2,',', '.')}}
-								€
-							</span>
-						</div>
-
-
-					</div>
-				{% endfor %}
+			{{form(form)}}
 			</div>
+			<div class="col-md-9">
+
+				<h2>Les produits</h2>
+				<div class="row">
+					{% for product in products %}
+						<div class="col-md-4">
+
+							<div
+								class="product-item text-center">
+								{# Utiliser OBLIGATOIREMENT path pour la route et un objet Json en deuxième paramètre #}
+								<a href="{{path('product', { 'slug': product.slug})}}"><img src="/uploads/{{product.picture}}" alt="{{product.name}}" class="img-fluid">
+								</a>
+								<h5>{{product.name}}</h5>
+								<span class="product-subtitle">{{product.subtitle}}</span>
+								{# Préciser le format de l'affichage du prix  #}
+								<span class="product-price">{{(product.price / 100)|number_format(2,',', '.')}}
+									€
+								</span>
+							</div>
+
+
+						</div>
+					{% endfor %}
+				</div>
+
+			</div>
+
 
 		</div>
 
 
 	</div>
-
-
-</div>{% endblock %}
+{% endblock %}
