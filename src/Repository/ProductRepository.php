@@ -50,7 +50,7 @@ class ProductRepository extends ServiceEntityRepository
 
     public function findWithSearch(Search $search)
     {
-        // DQL = SQL simplifé 
+        // DQL = SQL simplifé Doctrine Query
         $query = $this->createQueryBuilder('p')
             ->select('p', 'c')
             ->join('p.category', 'c');
@@ -65,6 +65,7 @@ class ProductRepository extends ServiceEntityRepository
                 ->andWhere('p.name LIKE :string')
                 ->setParameter('string', "%{$search->string}%");
         }
+        // obligatoire pour récupérer les résultats de la query 
         return $query->getQuery()->getResult();;
     }
 }
