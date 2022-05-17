@@ -46,19 +46,36 @@ class Cart
 
 
 
-    public function getProducts($cart)
+    public function getProducts()
     {
 
-        // Créer un tableau pour y stocker a chaque fois l index et la valeur 
-        foreach ($cart->get() as $key => $value) {
-            # code...
+        $cartController = [];
+        // mettre condition que le panier ne soit pas vide
+        if (empty($this->get())) {
 
-            $products = $this->entityManager->getRepository(Product::class)->findOneById($key);
-            $cartController[] = [
-                "products" => $products,
-                "quantity" => $value
-            ];
+            return $cartController;
+        } else {
+
+            // Créer un tableau pour y stocker a chaque fois l index et la valeur 
+            foreach ($this->get() as $key => $value) {
+                # code...
+
+                $products = $this->entityManager->getRepository(Product::class)->findOneById($key);
+                $cartController[] = [
+                    "products" => $products,
+                    "quantity" => $value
+                ];
+            }
+            return $cartController;
         }
-        return $cartController;
+    }
+
+    public function removeProduct($id)
+    {
+        $cart =  $this->requestStack->getSession()->get('cart');
+        // Supprimer seulement la ligne de produit correspondant à l'id 
+        unset($cart[$id]);
+        //renouveler avec le nouveau cart
+        return $this->requestStack->getSession()->set('cart', $cart);
     }
 }
