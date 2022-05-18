@@ -21,7 +21,7 @@ class CartController extends AbstractController
     {
 
 
-        $cartController = $cart->getProducts($cart);
+        $cartController = $cart->getProducts();
 
         // Le tableau permet de relier l'expression utilisé en twig et la variable 
         return $this->render('cart/index.html.twig',  [
@@ -55,6 +55,16 @@ class CartController extends AbstractController
     {
 
         $cart->removeProduct($id);
+
+        return $this->redirectToRoute('app_cart');
+    }
+
+    // Enlever une quantité au produit 
+    #[Route('/cart/decrease/{id}', name: 'app_cart_decrease_id')]
+    public function decreaseProduct(Cart $cart, $id): Response
+    {
+
+        $cart->decreaseProduct($id);
 
         return $this->redirectToRoute('app_cart');
     }

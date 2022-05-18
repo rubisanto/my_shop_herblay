@@ -23,7 +23,7 @@ class Cart
     public function add($id)
     {
         //Vérifier si le produit est déjà dans le panier 
-        $cart =  $this->requestStack->getSession()->get('cart', []);
+        $cart =  $this->requestStack->getSession()->get('cart');
         if (empty($cart[$id])) {
             $cart[$id] = 1;
         } else {
@@ -50,14 +50,15 @@ class Cart
     {
 
         $cartController = [];
+        $cart = $this->requestStack->getSession()->get('cart');
         // mettre condition que le panier ne soit pas vide
-        if (empty($this->get())) {
+        if (empty($cart)) {
 
             return $cartController;
         } else {
 
             // Créer un tableau pour y stocker a chaque fois l index et la valeur 
-            foreach ($this->get() as $key => $value) {
+            foreach ($cart as $key => $value) {
                 # code...
 
                 $products = $this->entityManager->getRepository(Product::class)->findOneById($key);
@@ -75,6 +76,28 @@ class Cart
         $cart =  $this->requestStack->getSession()->get('cart');
         // Supprimer seulement la ligne de produit correspondant à l'id 
         unset($cart[$id]);
+        //renouveler avec le nouveau cart
+        return $this->requestStack->getSession()->set('cart', $cart);
+    }
+
+    public function decreaseProduct($id)
+    {
+
+        $cart =  $this->requestStack->getSession()->get('cart');
+
+
+
+
+        if ($cart[$id] <= 1) {
+            # code...
+            unset($cart[$id]);
+        } else {
+            // Supprimer seulement la ligne de produit correspondant à l'id 
+            // $cart[$id] = $cart[$id] - 1;
+            //expression factorisée  
+            $cart[$id]--;
+        }
+
         //renouveler avec le nouveau cart
         return $this->requestStack->getSession()->set('cart', $cart);
     }

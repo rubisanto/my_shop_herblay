@@ -25,43 +25,70 @@
 			</thead>
 			<tbody>
 
+
 				{% for item in cartController %}
-					<tr>
-						<th scope="row">
-							<p>{{item.products.name}}</p>
-							<img style="width:2rem" src="/uploads/{{item.products.picture}}" alt="{{item.products.name}}" class="img-fluid"></th>
 
 
-						<td>{{item.quantity}}</td>
-						<td>{{(item.products.price / 100)|number_format(2,',', '.')}}
-							€
-						</td>
-						<td>
-							{{ (item.quantity * item.products.price / 100)|number_format(2,',', '.') }}
+					{% set totalPrice = totalPrice + (item.quantity * item.products.price / 100) %}
 
 
-							€
-						</td>
-						<td>
-							<a href="{{path('app_cart_remove_id', {'id': item.products.id})}}" class="btn btn-danger">
-								<i class="fa-solid fa-trash-can fa-red"></i>
-							</a>
-						</td>
+					{%  if item.quantity > 0 %}
+						<tr>
+							<th scope="row">
+								<p>{{item.products.name}}</p>
+								<img style="width:2rem" src="/uploads/{{item.products.picture}}" alt="{{item.products.name}}" class="img-fluid"></th>
 
-						{# modifier le totalPrice par rapport aux items #}
-						{% set totalPrice = totalPrice + (item.quantity * item.products.price / 100) %}
-					</tr>
-				{% endfor %}
-				<p>Nombre d'articles :
-					{# Trouver le nombre d'articles différents dans le panier  #}
-					{{cartController|length}}</p>
-				<p>Prix Total :
-					{# afficher le totalPrice #}
-					{{totalPrice|number_format(2,',', '.')}}
-					€
 
-				</p>
-			</tbody>
-		{% endif %}
-	</tbody>
-</p></tbody></td></tr></tbody></tbody></table>{% endblock %}
+							<td>
+								{# créer les fonctions dans le controller  #}
+								{# L'icone moins pour enelever une quantité #}
+									<a href="{{path('app_cart_decrease_id', {'id': item.products.id})}}" class="btn btn-danger"> <i class="fa-solid fa-minus"></i>
+								</a>
+
+								{{item.quantity}}
+
+
+								{# L'icone plus pour rajouter une quantité #}
+								<a href="{{path('app_cart_add', {'id': item.products.id})}}" class='btn btn-success'>
+									<i class="fa-solid fa-plus"></i>
+								</a>
+							</td>
+							<td>{{(item.products.price / 100)|number_format(2,',', '.')}}€</td>
+							<td>{{ (item.quantity * item.products.price / 100)|number_format(2,',', '.') }}€</td>
+							<td>
+								<a href="{{path('app_cart_remove_id', {'id': item.products.id})}}" class="btn btn-danger">
+
+									<i class="fa-solid fa-trash-can fa-red"></i>
+								</a>
+
+							</td>
+
+
+						</tr>
+
+
+					</tbody>
+
+
+				{% endif %}
+
+			{% endfor %}
+
+			<p>Nombre d'articles :
+
+				{# Trouver le nombre d'articles différents dans le panier  #}
+				{{cartController|length}}
+
+			</p>
+			<p>Prix Total :
+				{# afficher le totalPrice #}
+				{{totalPrice|number_format(2,',', '.')}}€
+
+			</p>
+
+
+		</table>
+		{{dump(cartController)}}
+
+	{% endif %}
+{% endblock %}
