@@ -41,7 +41,6 @@ class AddressType extends AbstractType
             ->add('phone', TextType::class, [
                 'label' => 'votre numéro de téléphone'
             ])
-            ->add('user')
             ->add('submit', SubmitType::class, [
                 'label' => 'Enregistrer votre adresse'
             ]);

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Address;
 use App\Form\AddressType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,17 +22,21 @@ class AddressController extends AbstractController
     #[Route('/compte/ajouter-adresse', name: 'app_address')]
     public function index(Request $request): Response
     {
-        // Récupérer le user 
-        $user = $this->getUser();
+        $adress =  new Address;
 
         //Create le form pour récupéer le form 
-        $form = $this->createForm(AddressType::class, $user);
+        $form = $this->createForm(AddressType::class, $adress);
 
         //attraper le formulaire 
         $form->handleRequest($request);
 
         // Verifier si le formulaire a bien été soumis 
         if ($form->isSubmitted()   &&  $form->isValid()) {
+            $adress = $form->getData();
+
+            //Pour intégrer dans la base de données 
+            $this->entityManager->persist($adress);
+            $this->entityManager->flush();
         }
 
 
@@ -40,7 +45,7 @@ class AddressController extends AbstractController
 
 
         return $this->render('address/index.html.twig', [
-            'controller_name' => 'AddressController',
+            'form' => $form->createView(),
         ]);
     }
 }
