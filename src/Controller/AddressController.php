@@ -35,6 +35,8 @@ class AddressController extends AbstractController
         if ($form->isSubmitted()   &&  $form->isValid()) {
             $adress = $form->getData();
 
+            $adress->setUser($this->getUser());
+
             //Pour intégrer dans la base de données 
             $this->entityManager->persist($adress);
             $this->entityManager->flush();
